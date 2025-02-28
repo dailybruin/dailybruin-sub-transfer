@@ -1,0 +1,63 @@
+# Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vientam-deployment
+  namespace: default
+  labels:
+    app: vietnam-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vietnam-php
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      name: vietnam-pod
+      labels:
+        app: vietnam-php
+    spec:
+      containers:
+      - name: vietnam-php-container
+        image: registry.digitalocean.com/dailybruin/vietnam-php:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 150m
+            memory: 230Mi
+          limits:
+            cpu: 250m
+            memory: 300Mi
+        ports:
+          - containerPort: 1919
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 1919
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      restartPolicy: Always
+---
+# Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: vietnam-service
+  labels:
+    app: vietnam-php
+spec:
+  selector:
+    app: vietnam-php
+  ports:
+    - protocol: TCP
+      port: 1919
+      targetPort: 1919
