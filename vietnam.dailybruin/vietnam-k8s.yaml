@@ -1,0 +1,62 @@
+# Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vietnam
+  namespace: default
+  labels:
+    app: vietnam-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vietnam-php
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      name: vietnam
+      labels:
+        app: vietnam-php
+    spec:
+      containers:
+      - name: flamingotested
+        image: registry.digitalocean.com/dailybruin/vietnamphpamd64:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 150m
+            memory: 230Mi
+          limits:
+            cpu: 250m
+            memory: 300Mi
+        ports: 
+          - containerPort: 1919
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /api/healthy
+            port: 1919
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      restartPolicy: Always
+---
+# Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: vietnam
+  labels:
+    app: vietnam-php
+spec:
+  selector:
+    app: vietnam
+  ports:
+    - protocol: TCP
+      port: 1919
+      targetPort: 1919
