@@ -3,15 +3,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vietnam
-  namespace: default
+  name: vietnam-dply
+  namespace: dailybruin-sub
   labels:
-    app: vietnam-php
+    app: vietnam
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vietnam-php
+      app: vietnam
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -21,11 +21,11 @@ spec:
     metadata:
       name: vietnam
       labels:
-        app: vietnam-php
+        app: vietnam
     spec:
       containers:
-      - name: flamingotested
-        image: registry.digitalocean.com/dailybruin/vietnamphpamd64:latest
+      - name: vietnam-php
+        image: dailybruin/vietnam-php:staging
         imagePullPolicy: Always
         resources:
           requests:
@@ -35,14 +35,8 @@ spec:
             cpu: 250m
             memory: 300Mi
         ports: 
-          - containerPort: 1919
+          - containerPort: 80
             protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /api/healthy
-            port: 1919
-          initialDelaySeconds: 10
-          periodSeconds: 10
       restartPolicy: Always
 ---
 # Service
@@ -50,7 +44,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vietnam
+  name: vietnam-svc
+  namespace: dailybruin-sub
   labels:
     app: vietnam-php
 spec:
@@ -58,5 +53,33 @@ spec:
     app: vietnam
   ports:
     - protocol: TCP
-      port: 1919
-      targetPort: 1919
+      port: 80
+      targetPort: 80
+
+---
+#Ingress
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: flamingo-tls
+  name: vietnam-php-ingress
+  namespace: dailybruin-sub
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: vietnam.dailybruin.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: vietnam-svc
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - vietnam.dailybruin.com
+    secretName: flamingo-tls
