@@ -1,0 +1,76 @@
+#mosaicContainer {
+	width: 480px;
+	height: inherit;
+	position: static;
+}
+
+.largecontainer {
+	background-color: #fff;
+	float: left;
+	position: relative;
+}
+
+#mosaicTitle {
+	position: absolute;
+	bottom: 15px;
+	left: 135px;
+	background-color: #2b5683;
+	color: #fff;
+	font-size: 50px;
+	line-height: 186px;
+	text-align: right;
+}
+
+.tiles {
+	position: absolute;
+	background-color: blue;
+	float: left;
+	z-index: 1;
+	overflow: hidden;
+}
+
+.tiles .vignette_unactive {
+	position: absolute;
+	z-index:3;
+}
+
+.tiles .thumb {
+	position: absolute;
+	z-index: 2;
+}
+
+.tiles h3 {
+	display: none;
+	position: absolute;
+	z-index:4;
+	bottom: 5px;
+	color: #fff;
+	width: inherit;
+	text-align: center;
+}
+
+.tiles .vignette {
+	display: none;
+	position: absolute;
+	width: inherit;
+	z-index: 3;
+}
+
+.tiles:hover h3, .tiles:hover .vignette {
+	display: block;
+	cursor: pointer;
+}
+
+.tiles:hover .vignette_unactive {
+	display: none;
+}
+
+.cleartile{
+	clear: both;
+}
+
+
+.floatright {
+	float:right;
+}
+

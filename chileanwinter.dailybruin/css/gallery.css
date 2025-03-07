@@ -1,0 +1,57 @@
+#slideshow {
+	position: relative;
+	float: left;
+	height: inherit;
+	overflow: hidden;
+	margin-right: 20px;
+}
+
+#slideshow .imgcontainer {
+	width: 600px;
+	height: 380px;
+	position: relative;
+}
+
+.imgcaption {
+	width: 380px;
+	position: absolute;
+	bottom: 10px;
+	left: 0px;
+	background-color: #2b5683;
+	padding: 10px;
+	box-shadow:0 0 10px #000;
+	-webkit-box-shadow: 0 0 10px #000;
+	-moz-box-shadow: 0 0 10px #000;
+	color: #fff;
+}
+
+/**Images should be smaller than parent container**/
+#slideshow img {
+	width: inherit;
+	height: inherit;
+	display: block;
+}
+
+#images {
+}
+
+#thumbnails {
+	float: left;
+	overflow-y: scroll;
+	height: inherit;
+}
+
+#thumbnails div{
+	width: 100px;
+	height: 64px;
+	margin: 5px;
+}
+
+#thumbnails .imgcaption {
+	visibility: hidden;
+}
+
+#thumbnails img {
+	width: inherit;
+	height: inherit;
+}

@@ -1,0 +1,7 @@
+AuthType Basic
+AuthName "Preview website"
+# (Following line optional)
+AuthBasicProvider file
+AuthUserFile /usr/local/apache/passwd/passwords
+Require user dailybruin 
+
